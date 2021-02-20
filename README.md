@@ -1,6 +1,5 @@
 # hvault-ocp-secrets-sync-operator
-An operator to deploy [hvault-ocp-secrets-sync](https://github.com/sumantripuraneni/hvault-ocp-secrets-sync) in a namespace to create/update the OpenShift4 secrets from Hashi Vault.
-
+An operator to deploy [hvault-ocp-secrets-sync agent](https://github.com/sumantripuraneni/hvault-ocp-secrets-sync) in a namespace to create/update the OpenShift4 secrets from Hashi Vault.
 
 This operator provides the functionality of creating :
 
@@ -11,10 +10,11 @@ This operator provides the functionality of creating :
 * A Controller code that watches for custom resource of type `hvaultsecretssync`in a cluster and deploys [hvault-ocp-secrets-sync](https://github.com/sumantripuraneni/hvault-ocp-secrets-sync) deployment
 
 
-
 ## How does it work?
 
-Once this operator is deployed, it will be watching for the custom resources (CR) in the cluster and when a custom resource is created in a namespace, operator will deploy [hvault-ocp-secrets-sync agent](https://github.com/sumantripuraneni/hvault-ocp-secrets-sync) in a correspnding namespace. This `hvault-ocp-secrets-sync` agent will create secrets and it will be injected with a configmap from custom resources (CR).
+As a pre-req, a configmap needs to be created in namespace and a serviceaccount to authenticate with Hashi Vault using KubeAuth mechanism.
+
+Once this operator is deployed, it will be watching for the custom resources (CR) in the cluster and when a custom resource is created in a namespace, operator will deploy [hvault-ocp-secrets-sync agent](https://github.com/sumantripuraneni/hvault-ocp-secrets-sync) in a corresponding namespace. This `hvault-ocp-secrets-sync` agent will create secrets and it will be injected with a configmap and serviceaccount (created as pre-req) from custom resources (CR).
 
 Supported secret types are: 
 
@@ -24,7 +24,8 @@ Supported secret types are:
 *  Opaque Secrets
 *  Opaque secrets based on a template (Jinja2)
 
-#### Sample Custom Resource
+
+#### Examples of custom resource(CR) and configmap
 
 An example custom resource(CR) definition
 
@@ -40,7 +41,7 @@ spec:
 ```
 
 
-Content of configmap: `vault-secrets-sync-agent`
+Example configmap: `vault-secrets-sync-agent`
 
 ```yaml
 ---
