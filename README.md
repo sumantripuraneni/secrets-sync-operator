@@ -10,6 +10,7 @@ This operator provides the functionality of creating :
 * A Controller code that watches for custom resource of type `hvaultsecretssync`in a cluster and deploys [hvault-ocp-secrets-sync](https://github.com/sumantripuraneni/hvault-ocp-secrets-sync) deployment
 
 
+
 ## How does it work?
 
 As a pre-req, a configmap needs to be created in namespace and a serviceaccount to authenticate with Hashi Vault using KubeAuth mechanism.
@@ -27,6 +28,7 @@ Supported secret types are:
 
 #### Examples of custom resource(CR) and configmap
 
+
 An example custom resource(CR) definition
 
 ```yaml
@@ -41,7 +43,7 @@ spec:
 ```
 
 
-Example configmap: `vault-secrets-sync-agent`
+An example configmap: `vault-secrets-sync-agent`
 
 ```yaml
 ---
