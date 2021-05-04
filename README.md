@@ -1,5 +1,5 @@
-# hvault-ocp-secrets-sync-operator
-An operator to deploy [hvault-ocp-secrets-sync agent](https://github.com/sumantripuraneni/hvault-ocp-secrets-sync) in a namespace to create/update the OpenShift4 secrets from Hashi Vault.
+# secrets-sync-operator
+An operator to deploy [secrets-syn-agent](https://github.com/sumantripuraneni/hvault-ocp-secrets-sync) in a namespace to create/update the OpenShift4 secrets from Hashi Vault.
 
 This operator provides the functionality of creating :
 
@@ -35,41 +35,9 @@ An example custom resource(CR) definition
 apiVersion: secretssync.redhat.com/v1alpha1
 kind: Hvaultsecretssync
 metadata:
-  name: hvaultsecretssync-sample
+  name: hvaultsecretssync-sample-testing
   namespace: suman-hvault-01
 spec:
-  configmap: 'vault-secrets-sync-agent'
-  serviceaccount: 'internal-app'
-```
-
-
-An example configmap: `vault-secrets-sync-agent`
-
-```yaml
----
-kube-secrets:
-  - vault-secret-path: v1/secret/data/appsecrets
-    kubernetes-secret: demo-appsecrets
-    secret-type: opaque
-
-  - vault-secret-path: v1/secret/data/nonprod-registry
-    kubernetes-secret: demo-nonprod-registry
-    secret-type: dockercfg
-
-  - vault-secret-path: v1/secret/data/prod-registry
-    kubernetes-secret: demo-nonprod-registry
-    secret-type: dockercfg    
-
-  - vault-secret-path: v1/secret/data/appcerts
-    kubernetes-secret: demo-appcerts
-    secret-type: tls
-
-##########################
-# Vault connection details
-###########################
-
-hashi-vault-url: http://10.24.0.1:8200/
-vault-login-url-endpoint: v1/auth/suman-hvault-01/login
-vault-secrets-refresh-seconds: 3000
-vault-kube-auth-role-name: suman-hvault-01
+  serviceaccount: internal-app
+  loglevel: DEBUG
 ```
