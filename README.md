@@ -1,5 +1,5 @@
 # secrets-sync-operator
-An operator to deploy [secrets-syn-agent](https://github.com/sumantripuraneni/hvault-ocp-secrets-sync) in a namespace to create/update the OpenShift4 secrets from Hashi Vault.
+An operator to deploy [secrets-syn-agent](https://github.com/sumantripuraneni/secrets-sync-agent) in a namespace to create/update the OpenShift4 secrets from Hashi Vault.
 
 This operator provides the functionality of creating :
 
@@ -13,9 +13,15 @@ This operator provides the functionality of creating :
 
 ## How does it work?
 
-As a pre-req, a configmap needs to be created in namespace and a serviceaccount to authenticate with Hashi Vault using KubeAuth mechanism.
+### Design 
 
-Once this operator is deployed, it will be watching for the custom resources (CR) in the cluster and when a custom resource is created in a namespace, operator will deploy [hvault-ocp-secrets-sync agent](https://github.com/sumantripuraneni/hvault-ocp-secrets-sync) in a corresponding namespace. This `hvault-ocp-secrets-sync` agent will create secrets and it will be injected with a configmap and serviceaccount (created as pre-req) from custom resources (CR).
+As a pre-requirement, two configmaps needs to be created in a namespace and a serviceaccount to authenticate with Hashi Vault using KubeAuth mechanism.
+
+
+Once this operator is deployed, it will be watching for the custom resources (CR) in the cluster scope (all namespaces) and when a custom resource is created by an user in a namespace, operator will deploy [secrets-sync-agent](https://github.com/sumantripuraneni/secrets-sync-agent) in a corresponding namespace, which will create secrets as per the configmaps
+
+![Alt text](images/secrets-sync-agnet-design1.jpeg?raw=true "Create secret in same namespace") 
+
 
 Supported secret types are: 
 
