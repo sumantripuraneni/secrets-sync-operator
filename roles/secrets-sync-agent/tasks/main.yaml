@@ -1,0 +1,78 @@
+---
+- name: Print message
+  debug:
+    msg: "Received custom resource - {{ ansible_operator_meta.name }} from namespace - {{ ansible_operator_meta.name }}"
+
+
+- name: Check if configmap - secrets-config exist in namespace - {{ ansible_operator_meta.namespace }}
+  k8s_info:
+    api_version: v1
+    kind: ConfigMap
+    name: secrets-config
+    namespace: '{{ ansible_operator_meta.namespace }}'
+  register: secrets_config_out
+
+
+- name: Check if configmap - secrets-data exist in namespace - {{ ansible_operator_meta.namespace }}
+  k8s_info:
+    api_version: v1
+    kind: ConfigMap
+    name: secrets-data
+    namespace: '{{ ansible_operator_meta.namespace }}'
+  register: secrets_data_out
+
+
+- name: Print message
+  debug:
+    msg: "ConfigMap - secrets-config does not exist in namespace - {{ ansible_operator_meta.namespace }}"
+  when:
+   - secrets_config_out.resources | length == 0 
+
+
+- name: Print message
+  debug:
+    msg: "ConfigMap - secrets-data does not exist in namespace - {{ ansible_operator_meta.namespace }}"
+  when:
+    - secrets_data_out.resources | length == 0
+
+- name: Deploy secrets-sync-agent in namespace - {{ ansible_operator_meta.namespace }}
+  k8s:
+    definition:
+      kind: Deployment
+      apiVersion: apps/v1
+      metadata:
+          name: '{{ ansible_operator_meta.name }}-secrets-sync-agent'
+          namespace: '{{ ansible_operator_meta.namespace }}'
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: secrets-sync-agent
+        template:
+          metadata:
+            labels:
+              app: secrets-sync-agent
+          spec:
+            serviceAccountName: '{{ serviceaccount }}'
+            volumes:
+              - name: secrets-config
+                configMap:
+                  name: secrets-config
+              - name: secrets-data
+                configMap:
+                  name: secrets-data
+            containers:
+              - name: secrets-sync-agent
+                image: "quay.io/suman.tripuraneni/hvault-ocp-secrets-sync:v0.5"
+                imagePullPolicy: Always
+                env:
+                  - name: LOG_LEVEL
+                    value: "{{ loglevel }}"
+                volumeMounts:
+                  - name: secrets-config
+                    mountPath: /etc/secrets_sync_agent/connection_info
+                  - name: secrets-data
+                    mountPath: /etc/secrets_sync_agent/secrets_info
+  when:
+    - secrets_data_out.resources | length > 0 
+    - secrets_config_out.resources | length > 0

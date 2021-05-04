@@ -1,0 +1,4 @@
+---
+# defaults
+serviceAccount: default
+logLevel: INFO
