@@ -38,22 +38,22 @@ Supported secret types are:
 An example custom resource(CR) definition
 
 ```yaml
-apiVersion: secretssync.redhat.com/v1alpha1
-kind: Hvaultsecretssync
+apiVersion: secretssync.redhat.com/v1alpha1                               ## API version 
+kind: Hvaultsecretssync                                                   ## API kind 
 metadata:
-  name: hvaultsecretssync-sample-testing
-  namespace: suman-hvault-01
+  name: hvaultsecretssync-sample-testing                                  ## Name of custom resource 
+  namespace: suman-hvault-01                                              ## Namespace to create custom resource 
 spec:
-  serviceaccount: internal-app
-  loglevel: DEBUG
-  secretsRefreshSeconds: 300
-  connectionInfo:
-    VAULT_ADDR: http://52.116.136.244:8200/
+  serviceaccount: internal-app                                            ## Instructs service account to use to run "secrets-sync-agent". Default to "default" SA
+  loglevel: DEBUG                                                         ## Instructs level of logging. Defaults to "INFO"
+  secretsRefreshSeconds: 300                                              ## Instructs how frequent to check and refresh secrets. Defaults to "3600" seconds
+  connectionInfo:                                                         ## vault connection details
+    VAULT_ADDR: http://52.116.136.244:8200/                               ## 
     VAULT_LOGIN_ENDPOINT: v1/auth/kubernetes/login
     VAULT_ROLE: suman-test
-    KUBE_SECRETS_MGMT_CREDS_PATH: v1/kube/secrets/data/openshift/accounts/someaccount
+    KUBE_SECRETS_MGMT_CREDS_PATH: v1/secrets/data/ocp/accounts/someaccount  ##vault secret path of user which wil be used to generate OpenShift session token to create/update/path/get/lust secrets.
     #VAULT_NAMESPACE: projects   For enterprise Hashi vault 
-  secretsInfo:
+  secretsInfo:                                                            ## Information on secrets retrieval 
     KUBE_SECRETS:
       - VAULT_SECRET_PATH: v1/secret/data/appsecrets
         KUBERNETES_SECRET: demo-appsecrets
@@ -64,5 +64,3 @@ spec:
       - VAULT_SECRET_PATH: v1/secret/data/auth
         KUBERNETES_SECRET: demo-ssh-auth
         SECRET_TYPE: ssh-auth      
-```
-
