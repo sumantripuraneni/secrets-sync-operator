@@ -32,7 +32,7 @@ Supported secret types are:
 *  Opaque secrets based on a template (Jinja2)
 
 
-#### Examples of custom resource(CR) and configmap
+#### Examples of custom resource(CR)
 
 
 An example custom resource(CR) definition
@@ -46,5 +46,23 @@ metadata:
 spec:
   serviceaccount: internal-app
   loglevel: DEBUG
+  secretsRefreshSeconds: 300
+  connectionInfo:
+    VAULT_ADDR: http://52.116.136.244:8200/
+    VAULT_LOGIN_ENDPOINT: v1/auth/kubernetes/login
+    VAULT_ROLE: suman-test
+    KUBE_SECRETS_MGMT_CREDS_PATH: v1/kube/secrets/data/openshift/accounts/someaccount
+    #VAULT_NAMESPACE: projects   For enterprise Hashi vault 
+  secretsInfo:
+    KUBE_SECRETS:
+      - VAULT_SECRET_PATH: v1/secret/data/appsecrets
+        KUBERNETES_SECRET: demo-appsecrets
+        SECRET_TYPE: opaque
+      - VAULT_SECRET_PATH: v1/secret/data/certs
+        KUBERNETES_SECRET: demo-appcerts
+        SECRET_TYPE: tls
+      - VAULT_SECRET_PATH: v1/secret/data/auth
+        KUBERNETES_SECRET: demo-ssh-auth
+        SECRET_TYPE: ssh-auth      
 ```
 
