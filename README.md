@@ -44,9 +44,9 @@ metadata:
   name: hvaultsecretssync-sample-testing                                      ## Name of custom resource 
   namespace: suman-hvault-01                                                  ## Namespace to create custom resource 
 spec:
-  serviceaccount: internal-app                                                ## Instructs service account to use to run "secrets-sync-agent". Default to "default" SA
-  loglevel: DEBUG                                                             ## Instructs level of logging. Defaults to "INFO"
-  secretsRefreshSeconds: 300                                                  ## Instructs how frequent to check and refresh secrets. Defaults to "3600" seconds
+  serviceaccount: internal-app                                                ## Instructs service account to use to run "secrets-sync-agent". Optional and Defaults to "default" SA
+  loglevel: DEBUG                                                             ## Instructs level of logging. Optional and Defaults to "INFO"
+  secretsRefreshSeconds: 300                                                  ## Instructs how frequent to check and refresh secrets. Optional and Defaults to "3600" seconds
   connectionInfo:                                                             ## vault connection details
     VAULT_ADDR: http://52.116.136.244:8200/                                     
     VAULT_LOGIN_ENDPOINT: v1/auth/kubernetes/login
